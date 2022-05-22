@@ -7,10 +7,12 @@
             <div class="col">
                 <div class="">
 
+                    @if(count($contacts) != 0)
                         <div class="">
                             <input type="checkbox" id="checkAll" class="form-check-input">
                             <label class="form-check-label" for="checkAll">Select All</label>
                         </div>
+                    @endif
 
                     <form action="{{route('contact.bulkForceAction')}}" id="bulk_force_action" method="post">
                         @csrf

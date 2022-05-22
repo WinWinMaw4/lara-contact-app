@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Mail\SendMail;
 use App\Models\Contact;
 use App\Models\User;
 use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ContactController extends Controller
@@ -58,21 +61,34 @@ class ContactController extends Controller
             "photo"=>'nullable|file|mimes:jpeg,png|max:5000'
         ]);
 
+        DB::beginTransaction();
 
-        if($request->hasFile('photo')){
-            $newName = "profile_".uniqid().".".$request->file('photo')->extension();
-            $request->file('photo')->storeAs("public/photo",$newName);
-        }else{
-            $newName = null;
+        try{
+
+            if($request->hasFile('photo')){
+                $newName = "profile_".uniqid().".".$request->file('photo')->extension();
+                $request->file('photo')->storeAs("public/photo",$newName);
+            }else{
+                $newName = null;
+            }
+            $newContact = new Contact();
+            $newContact->name = $request->name;
+            $newContact->phone = $request->phone;
+            $newContact->photo = $newName;
+            $newContact->user_id = Auth::id();
+            $newContact->save();
+
+            DB::commit();
+
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+            throw $e;
+
         }
 
-        $newContact = new Contact();
-        $newContact->name = $request->name;
-        $newContact->phone = $request->phone;
-        $newContact->photo = $newName;
-        $newContact->user_id = Auth::id();
-        $newContact->save();
-        return redirect()->route('contact.index');
+
+        return redirect()->route('contact.index')->with('status',"You contact Created");
     }
 
     /**
@@ -127,7 +143,7 @@ class ContactController extends Controller
             $contact->photo = $newName;
         }
         $contact->update();
-        return redirect()->route('contact.index');
+        return redirect()->route('contact.index')->with('status',"You $contact->name Updated");
     }
 
     /**
@@ -146,32 +162,50 @@ class ContactController extends Controller
     public function restore($id){
         $contact=Contact::withTrashed()->findOrFail($id);
         $contact->restore();
-        return redirect()->back()->with('success',"$contact->name has been restored");
+        return redirect()->back()->with('status',"$contact->name has been restored");
     }
     public function forceDelete($id){
         $contact=Contact::withTrashed()->findOrFail($id);
         Storage::delete("public/photo/".$contact->photo);
         $contact->forceDelete();
-        return redirect()->back()->with('success',"$contact->name has been forceDelete");
+        return redirect()->back()->with('status',"$contact->name has been forceDelete");
     }
 
     public function bulkAction(\Illuminate\Http\Request $request){
 //        return $request;
         if($request->functionality == 1){
-            $user = User::where('email',$request->email)->first();
-            $userId = $user->id;
+            $receiver = User::where('email',$request->email)->first();
+            $receiverId = $receiver->id;
+            $sendUsers = Auth::user()->name;
+            $sendContact = Contact::whereIn('id',$request->contact_ids)->get();
+            Contact::whereIn('id',$request->contact_ids)->update(['user_id'=>$receiverId]);
 
-            Contact::whereIn('id',$request->contact_ids)->update(['user_id'=>$userId]);
+//            Send Mail
+//            $mailReceivers = [Auth::user()->email,$request->email];
+//            foreach($mailReceivers as $mailReceiver){
+//                Mail::to($mailReceiver)->send(new SendMail($sendUsers,$sendContact,$receiver));
+//            }
 
         }elseif($request->functionality == 2){
             Contact::destroy($request->contact_ids);
         }else{
             return abort(403);
         }
-
-
         return redirect()->back();
     }
+
+
+
+    public function bulkActionOnce(\Illuminate\Http\Request $request){
+        $receiver = User::whereIn('email',$request->email)->first();
+        $receiverId = $receiver->id;
+        $sendUsers = Auth::user()->name;
+        $sendContact = Contact::where('id',$request->contact_id)->get();
+        Contact::where('id',$request->contact_id)->update(['user_id'=>$receiverId]);
+
+        return redirect()->back()->with('status',"You shared some contact to $receiver->name");
+    }
+
 
 
     public function bulkForceAction(\Illuminate\Http\Request $request){

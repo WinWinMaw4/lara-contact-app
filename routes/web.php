@@ -31,6 +31,7 @@ Route::middleware("auth")->group(function (){
     Route::get('/contact/restore/{id}',[ContactController::class,'restore'])->name('contact.restore');
     Route::get('/contact/force-delete/{id}',[ContactController::class,'forceDelete'])->name('contact.forceDelete');
     Route::post('/contact-bulk-action',[ContactController::class,'bulkAction'])->name('contact.bulkAction');
+    Route::post('/contact-bulk-action-once',[ContactController::class,'bulkActionOnce'])->name('contact.bulkActionOnce');
     Route::post('/contact-bulk-force-action',[ContactController::class,'bulkForceAction'])->name('contact.bulkForceAction');
 
 

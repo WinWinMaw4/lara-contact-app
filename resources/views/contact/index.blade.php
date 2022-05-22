@@ -7,10 +7,12 @@
         <div class="col">
             <div class="">
 
-                <div class="">
-                    <input type="checkbox" id="checkAll" class="form-check-input">
-                    <label class="form-check-label" for="checkAll">Select All</label>
-                </div>
+                @if(count($contacts) != 0)
+                    <div class="">
+                        <input type="checkbox" id="checkAll" class="form-check-input">
+                        <label class="form-check-label" for="checkAll">Select All</label>
+                    </div>
+                @endif
 
                 <form action="{{route('contact.bulkAction')}}" id="bulk_action" method="post">
                     @csrf
@@ -20,7 +22,13 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div class="">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" form="bulk_action" name="contact_ids[]"  value="{{$contact->id}}" id="contact{{ $contact->id  }}">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           form="bulk_action"
+                                           name="contact_ids[]"
+                                           value="{{$contact->id}}"
+                                           id="contact{{ $contact->id  }}"
+                                    />
                                     <label class="form-check-label" for="contact{{ $contact->id  }}">
                                         <div class="d-flex justify-content-center align-items-center">
                                             <div id="pf-small-img" class="border border-1 rounded-circle me-2" >
@@ -44,9 +52,15 @@
 
                             </div>
                             <div class="btn-group">
-                                    <button class="btn btn-sm btn-outline-primary">
+                                <form action="{{route('contact.bulkActionOnce',$contact->id)}}" id="bulk-action-once" method="post">
+                                    @csrf
+                                    <input type="hidden"  name="contact_id" value="{{$contact->id}}">
+                                </form>
+                                <button class="shareBtn btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#emailModal{{$contact->id}}">
                                         <i class="fa-solid fa-fw  fa-paper-plane"></i>
-                                    </button>
+                                </button>
+
+
                                     <a href="{{ route('contact.edit',$contact->id) }}" class="btn btn-sm btn-outline-primary">
                                         <i class="fa-solid fa-fw fa-pencil-alt"></i>
                                     </a>
@@ -69,7 +83,7 @@
                 <div class="d-flex justify-content-between align-items-center my-2">
                     <div class="">
                         <div class="d-flex">
-                            <select class="form-select me-2" form="bulk_action" name="functionality" required>
+                            <select class="form-select me-2" form="bulk_action" name="functionality">
                                 <option value="">Select Action</option>
                                 <option value="1">Share Contact</option>
                                 <option value="2">Delete Contact</option>
@@ -90,8 +104,35 @@
 </div>
 
 
-{{--    MOdal Box--}}
+
 <!-- Modal -->
+
+@foreach($contacts as $contact)
+<div class="modal fade" id="emailModal{{$contact->id}}" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailModalLabel">Receiver Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <label class="form-label" for="">Recipient Email</label>
+                    <input type="text" name="email[]" form="bulk-action-once" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="cancelAction()"  class="btn btn-secondary">Close</button>
+                <button type="submit" form="bulk-action-once" class="btn btn-primary">
+                    <i class="fa-solid fa-paper-plane"></i> Share
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
+{{--for multiple selected--}}
 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -114,7 +155,12 @@
         </div>
     </div>
 </div>
+
 {{--    end Modal Box--}}
+
+
+
+
 @endsection
 @push('js')
     <script>
@@ -122,6 +168,8 @@
         let emailModal = document.querySelector('#emailModal');
         let myEmailModal =new bootstrap.Modal(emailModal);
         let contactBulkFunctionalitySelect = document.querySelector(`[name="functionality"]`);
+        let shareBtn = document.querySelector('.shareBtn');
+        console.log(shareBtn)
 
         contactBulkFunctionalitySelect.addEventListener('change',function (){
             let selected = Number(this.value);
@@ -138,14 +186,13 @@
         }
     </script>
 
-
-
-
-
-
     <script>
         $("#checkAll").click(function () {
             $('input:checkbox').not(this).prop('checked', this.checked);
         });
+    </script>
+
+    <script>
+
     </script>
 @endpush

@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.1.1",
-        "popper.js": "^1.16.1"
+        "popper.js": "^1.16.1",
+        "sweetalert2": "^11.4.15"
     }
 }
