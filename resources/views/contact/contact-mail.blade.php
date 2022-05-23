@@ -14,6 +14,7 @@
     </style>
 </head>
 <body>
+    <h1 class="text-danger">Danger &times;</h1>
     <h3>Contact Sharing</h3>
     <p>{{count($sendContact)}} Contact Shared form <span class="fw-bold ">`{{$sendUsers}}`</span> to <span class="fw-bold ">`{{$receiver->name}}`</span></p>
     <a href="{{route('contact.index')}}">See More</a>

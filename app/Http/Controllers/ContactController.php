@@ -88,7 +88,7 @@ class ContactController extends Controller
         }
 
 
-        return redirect()->route('contact.index')->with('status',"You contact Created");
+        return redirect()->route('contact.index')->with('status',"You $newContact->name contact Created");
     }
 
     /**
@@ -130,19 +130,31 @@ class ContactController extends Controller
             "photo"=>'nullable|file|mimes:jpeg,png|max:5000'
         ]);
 
-        $contact = Contact::findOrFail($contact->id);
-        $contact->name = $request->name;
-        $contact->phone = $request->phone;
-        $contact->user_id = Auth::id();
-        if($request->hasFile('photo')){
-            //            delete old cover
-            Storage::delete("public/photo/".$contact->photo);
+        DB::beginTransaction();
+        try{
 
-            $newName = "profile_".uniqid().".".$request->file('photo')->extension();
-            $request->file('photo')->storeAs("public/photo",$newName);
-            $contact->photo = $newName;
+            $contact = Contact::findOrFail($contact->id);
+            $contact->name = $request->name;
+            $contact->phone = $request->phone;
+            $contact->user_id = Auth::id();
+            if($request->hasFile('photo')){
+                //            delete old cover
+                Storage::delete("public/photo/".$contact->photo);
+
+                $newName = "profile_".uniqid().".".$request->file('photo')->extension();
+                $request->file('photo')->storeAs("public/photo",$newName);
+                $contact->photo = $newName;
+            }
+            $contact->update();
+
+            DB::commit();
+
+        }catch (\Exception $error){
+            DB::rollBack();
+            throw $error;
         }
-        $contact->update();
+
+
         return redirect()->route('contact.index')->with('status',"You $contact->name Updated");
     }
 
