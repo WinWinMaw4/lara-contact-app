@@ -11317,3 +11317,21 @@ textarea.form-control-lg {
   -o-object-fit: cover;
      object-fit: cover;
 }
+
+a {
+  text-decoration: none;
+}
+
+.noti-dropdown.dropdown-toggle::after {
+  border: none;
+}
+
+.noti-menu {
+  width: 25em;
+  height: 90vh;
+  overflow: hidden;
+}
+
+.noti-menu:hover {
+  overflow: overlay;
+}

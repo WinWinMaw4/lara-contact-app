@@ -7,7 +7,7 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
-@import "~sweetalert2";
+//@import "~sweetalert2";
 
 #pf-img{
     width: 100%;
@@ -31,4 +31,20 @@
     height: 100%;
     object-fit: cover;
 }
+
+a{
+    text-decoration: none;
+}
+.noti-dropdown.dropdown-toggle::after {
+    border: none;
+}
+.noti-menu{
+    width: 25em;
+    height: 90vh;
+    overflow: hidden;
+}
+.noti-menu:hover{
+    overflow: overlay;
+}
+
 

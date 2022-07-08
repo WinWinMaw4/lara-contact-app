@@ -53,6 +53,63 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle position-relative noti-dropdown" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-bell fa-fw fa-2x"></i>
+                                    @if(count(auth()->user()->unreadNotifications ) != 0)
+                                        <span class="badge bg-primary rounded-circle position-absolute" style="right: 10px;top:3px;z-index: 100;">
+                                        {{count(auth()->user()->unreadNotifications)}}
+                                        </span>
+                                    @endif
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end noti-menu py-0" aria-labelledby="navbarDropdown">
+                                    <ul class="list-group">
+                                        @if(count(auth()->user()->Notifications ) != 0 )
+                                        <li class="list-group-item border-0 border-bottom text-end">
+
+                                                <a href="{{route('AllMarkAsRead')}}" class="btn btn-outline-success">
+                                                    All MarkAsRead
+                                                </a>
+                                                <a href="{{route('deleteAllNotification')}}" class="btn btn-danger">
+                                                    Delete All Noti
+                                                </a>
+                                        </li>
+                                        @endif
+                                        @forelse(auth()->user()->Notifications as $notification)
+                                            <li class="list-group-item border-0 border-bottom">
+                                                <a href="{{$notification->data['url']}}"  class="{{ $notification->read_at !=  null ? 'text-black-50' : 'text-black' }} text-decoration-none d-flex justify-content-start align-items-center">
+                                                    @if($notification->read_at == null)
+                                                        <div class="bg-primary rounded-circle p-1 me-3" style="width: 10px;height: 10px;"></div>
+                                                    @else
+                                                        <div class="bg-light rounded-circle p-1 me-3" style="width: 10px;height: 10px;"></div>
+                                                    @endif
+                                                    <div class="">
+                                                        <strong>
+                                                            {{$notification->data['message']}}
+
+                                                        </strong>
+                                                        {{strtolower($notification->data['title'])}}
+                                                    </div>
+{{--                                                        {{$notification->id}}--}}
+                                                    <span class="text-nowrap small">
+                                                    {{$notification->created_at->shortRelativeDiffForHumans()}}
+                                                </span>
+                                                </a>
+                                                <a href="{{route('markAsRead',$notification->id)}}" class="btn btn-sm btn-outline-success my-2 float-end @if($notification->read_at !=  null) disabled @endif">
+                                                    Mark As Read
+                                                </a>
+
+                                            </li>
+                                        @empty
+                                            <li class="list-group-item border-0">
+                                                No record Found
+                                            </li>
+                                        @endforelse
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>

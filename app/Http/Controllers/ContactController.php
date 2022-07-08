@@ -6,7 +6,9 @@ use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
 use App\Mail\SendMail;
 use App\Models\Contact;
+use App\Models\SharedContact;
 use App\Models\User;
+use App\Notifications\ContactShareNotification;
 use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -184,13 +186,25 @@ class ContactController extends Controller
     }
 
     public function bulkAction(\Illuminate\Http\Request $request){
-//        return $request;
         if($request->functionality == 1){
             $receiver = User::where('email',$request->email)->first();
-            $receiverId = $receiver->id;
-            $sendUsers = Auth::user()->name;
-            $sendContact = Contact::whereIn('id',$request->contact_ids)->get();
-            Contact::whereIn('id',$request->contact_ids)->update(['user_id'=>$receiverId]);
+
+             $shareContact = new SharedContact();
+             $shareContact->from = Auth::id();
+             $shareContact->to = $receiver->id;
+             $shareContact->contact_ids = json_encode($request->contact_ids);
+             $shareContact->message = $request->message;
+             $shareContact->save();
+
+//            $receiverId = $receiver->id;
+//            $sendUsers = Auth::user()->name;
+//            $sendContact = Contact::whereIn('id',$request->contact_ids)->get();
+//            $message = $request->message;
+
+            $receiver->notify(new ContactShareNotification($shareContact,route('shared-contact.show',$shareContact->id)));
+
+            return redirect()->back()->with('status','Contact Share Successed');
+            Contact::whereIn('id',$request->contact_ids)->update(['user_id'=>$receiver->id]);
 
 //            Send Mail
 //            $mailReceivers = [Auth::user()->email,$request->email];
@@ -209,13 +223,21 @@ class ContactController extends Controller
 
 
     public function bulkActionOnce(\Illuminate\Http\Request $request){
-        $receiver = User::whereIn('email',$request->email)->first();
-        $receiverId = $receiver->id;
-        $sendUsers = Auth::user()->name;
-        $sendContact = Contact::where('id',$request->contact_id)->get();
-        Contact::where('id',$request->contact_id)->update(['user_id'=>$receiverId]);
 
-        return redirect()->back()->with('status',"You shared some contact to $receiver->name");
+
+        return $request;
+        $receiver = User::whereIn('email',$request->email)->first();
+
+        $shareContact = new SharedContact();
+        $shareContact->from = Auth::id();
+        $shareContact->to = $receiver->id;
+        $shareContact->contact_ids = json_encode($request->contact_ids);
+        $shareContact->save();
+
+        $receiver->notify(new ContactShareNotification($shareContact,route('shared-contact.show',$shareContact->id)));
+//        Contact::where('id',$request->contact_id)->update(['user_id'=>$receiverId]);
+
+        return redirect()->back()->with('status',"Contact Share Success to $receiver->name");
     }
 
 

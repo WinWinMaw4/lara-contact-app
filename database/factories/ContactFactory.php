@@ -20,7 +20,7 @@ class ContactFactory extends Factory
             "name" => $this->faker->name,
             "phone" => $this->faker->phoneNumber,
             "photo"=> null,
-            "user_id" => rand(1,10)
+            "user_id" => rand(1,13)
         ];
     }
 }

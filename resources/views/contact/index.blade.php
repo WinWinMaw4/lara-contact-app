@@ -45,6 +45,9 @@
                                                 <p class="text-black-50 mb-0">
                                                     {{ $contact->phone }}
                                                 </p>
+                                                <p>
+                                                    {{$contact->created_at}}
+                                                </p>
                                             </div>
                                         </div>
                                     </label>
@@ -54,7 +57,7 @@
                             <div class="btn-group">
                                 <form action="{{route('contact.bulkActionOnce',$contact->id)}}" id="bulk-action-once" method="post">
                                     @csrf
-                                    <input type="hidden"  name="contact_id" value="{{$contact->id}}">
+                                    <input type="hidden"  name="contact_ids[]" value="{{$contact->id}}">
                                 </form>
                                 <button class="shareBtn btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#emailModal{{$contact->id}}">
                                         <i class="fa-solid fa-fw  fa-paper-plane"></i>
@@ -144,6 +147,10 @@
                 <div class="">
                     <label class="form-label" for="">Recipient Email</label>
                     <input type="text" name="email" form="bulk_action" class="form-control">
+                </div>
+                <div class="">
+                    <label class="form-label" for="">Message</label>
+                    <textarea name="message" form="bulk_action" class="form-control" id="" cols="30" rows="7"></textarea>
                 </div>
             </div>
             <div class="modal-footer">

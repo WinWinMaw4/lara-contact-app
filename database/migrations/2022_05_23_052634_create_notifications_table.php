@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shared_contacts', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('from');
-            $table->unsignedBigInteger('to');
-            $table->json('contact_ids');
-            $table->text('message')->nullable();
-            $table->string('status')->nullable();
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('type');
+            $table->morphs('notifiable');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shared_contacts');
+        Schema::dropIfExists('notifications');
     }
 };
