@@ -17,8 +17,10 @@
                 <form action="{{route('contact.bulkAction')}}" id="bulk_action" method="post">
                     @csrf
                 </form>
+
                 <ul class="list-group">
                     @forelse($contacts as $contact)
+
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div class="">
                                 <div class="form-check">
@@ -55,12 +57,20 @@
 
                             </div>
                             <div class="btn-group">
-                                <form action="{{route('contact.bulkActionOnce',$contact->id)}}" id="bulk-action-once" method="post">
+{{--                                //single share form--}}
+                                <form
+                                    action="{{route('contact.bulkActionOnce',$contact->id)}}"
+                                    id="bulk-action-once"
+                                    method="post">
                                     @csrf
-                                    <input type="hidden"  name="contact_ids[]" value="{{$contact->id}}">
+                                    <input type="hidden"
+                                           name="contact_ids[]"
+                                           value="{{$contact->id}}"
+                                    >
+
                                 </form>
-                                <button class="shareBtn btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#emailModal{{$contact->id}}">
-                                        <i class="fa-solid fa-fw  fa-paper-plane"></i>
+                                <button class="shareBtn btn btn-sm btn-outline-primary" id="contact_id{{$contact->id}}" data-bs-toggle="modal" data-bs-target="#emailModal{{$contact->id}}">
+                                    <i class="fa-solid fa-fw  fa-paper-plane"></i>
                                 </button>
 
 
@@ -119,6 +129,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <div class="">
+{{--                    <input type="text" name="contact" form="bulk-action-once" class="form-control">--}}
+                    <p>{{$contact->id}}</p>
+                </div>
                 <div class="">
                     <label class="form-label" for="">Recipient Email</label>
                     <input type="text" name="email[]" form="bulk-action-once" class="form-control">

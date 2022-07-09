@@ -86,23 +86,24 @@ class ShareContactController extends Controller
         //
         if($request->action === "accept"){
 
+
+//             following comment code is cut code
 //            Contact::whereIn('id',json_decode($sharedContact->contact_ids))->update(['user_id'=>Auth::id()]);
-//            $contact = Contact::whereIn('id',json_decode($sharedContact->contact_ids))->get();
+
+//            this is copy code
+            $sharedContact->status = $request->action;
+            $sharedContact->update();
             $contacts = Contact::whereIn('id',json_decode($sharedContact->contact_ids))->get();
-//            return $contact;
-//            $newContact = $contact->replicate();
             foreach ($contacts as $contact){
                 $sharedContact = $contact->replicate();
+                $sharedContact->user_id = Auth::id();
+                $result = $sharedContact->save();
             }
 
-//            $sharedContact = $contacts->replicate();
-            $sharedContact->user_id = Auth::id();
-            $result = $sharedContact->save();
-            dd($result);
+
+//            dd($result);
 
         }
-        $sharedContact->status = $request->action;
-        $sharedContact->update();
 
         return redirect()->route('contact.index')->with('status','Some Contacts You '.$request->action);
     }

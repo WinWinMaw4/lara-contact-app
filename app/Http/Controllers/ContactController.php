@@ -225,7 +225,6 @@ class ContactController extends Controller
     public function bulkActionOnce(\Illuminate\Http\Request $request){
 
 
-        return $request;
         $receiver = User::whereIn('email',$request->email)->first();
 
         $shareContact = new SharedContact();
