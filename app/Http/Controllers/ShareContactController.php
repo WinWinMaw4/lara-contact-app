@@ -7,6 +7,8 @@ use App\Models\SharedContact;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ShareContactController extends Controller
 {
@@ -91,13 +93,22 @@ class ShareContactController extends Controller
 //            Contact::whereIn('id',json_decode($sharedContact->contact_ids))->update(['user_id'=>Auth::id()]);
 
 //            this is copy code
-            $sharedContact->status = $request->action;
-            $sharedContact->update();
+//            $sharedContact->status = $request->action;
+//            $sharedContact->update();
             $contacts = Contact::whereIn('id',json_decode($sharedContact->contact_ids))->get();
             foreach ($contacts as $contact){
                 $sharedContact = $contact->replicate();
-                $sharedContact->user_id = Auth::id();
-                $result = $sharedContact->save();
+                $newName = time().$contact->photo;
+//                Storage::move('photo/'.$contact->photo,'photo/'.$newName);
+                $newName = 'share_'.time().'_'.$contact->photo;
+                $newPathWithName = 'public/photo/'.$newName;
+                if (Storage::copy('public/photo/'.$contact->photo , $newPathWithName)) {
+//                    dd("success");
+                    $sharedContact->photo = $newName;
+                    $sharedContact->user_id = Auth::id();
+
+                    $result = $sharedContact->save();
+                }
             }
 
 
