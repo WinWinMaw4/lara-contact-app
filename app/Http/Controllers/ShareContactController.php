@@ -98,8 +98,6 @@ class ShareContactController extends Controller
             $contacts = Contact::whereIn('id',json_decode($sharedContact->contact_ids))->get();
             foreach ($contacts as $contact){
                 $sharedContact = $contact->replicate();
-                $newName = time().$contact->photo;
-//                Storage::move('photo/'.$contact->photo,'photo/'.$newName);
                 $newName = 'share_'.time().'_'.$contact->photo;
                 $newPathWithName = 'public/photo/'.$newName;
                 if (Storage::copy('public/photo/'.$contact->photo , $newPathWithName)) {
