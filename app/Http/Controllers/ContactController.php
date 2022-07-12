@@ -29,7 +29,7 @@ class ContactController extends Controller
         return view("contact.index",compact('contacts'));
     }
     public function goToTrash(Contact $contact){
-        $contacts = Contact::onlyTrashed()->where("user_id",Auth::id())->latest('deleted_at')->paginate(7);
+        $contacts = Contact::onlyTrashed()->where("user_id",Auth::id())->orderByDesc('deleted_at')->paginate(7);
         return view('contact.contact-trash',compact('contacts'));
     }
 
@@ -186,25 +186,28 @@ class ContactController extends Controller
     }
 
     public function bulkAction(\Illuminate\Http\Request $request){
-        if($request->functionality == 1){
-            $receiver = User::where('email',$request->email)->first();
+        if($request->contact_ids == null){
+            return  redirect()->back()->with('null','Please select at least one.');
+        }else{
+            if($request->functionality == 1){
+                $receiver = User::where('email',$request->email)->first();
 
-             $shareContact = new SharedContact();
-             $shareContact->from = Auth::id();
-             $shareContact->to = $receiver->id;
-             $shareContact->contact_ids = json_encode($request->contact_ids);
-             $shareContact->message = $request->message;
-             $shareContact->save();
+                $shareContact = new SharedContact();
+                $shareContact->from = Auth::id();
+                $shareContact->to = $receiver->id;
+                $shareContact->contact_ids = json_encode($request->contact_ids);
+                $shareContact->message = $request->message;
+                $shareContact->save();
 
 //            $receiverId = $receiver->id;
 //            $sendUsers = Auth::user()->name;
 //            $sendContact = Contact::whereIn('id',$request->contact_ids)->get();
 //            $message = $request->message;
 
-            $receiver->notify(new ContactShareNotification($shareContact,route('shared-contact.show',$shareContact->id)));
+                $receiver->notify(new ContactShareNotification($shareContact,route('shared-contact.show',$shareContact->id)));
 
-            return redirect()->back()->with('status','Contact Share Successed');
-            Contact::whereIn('id',$request->contact_ids)->update(['user_id'=>$receiver->id]);
+                return redirect()->back()->with('status','Contact Share Successed');
+                Contact::whereIn('id',$request->contact_ids)->update(['user_id'=>$receiver->id]);
 
 //            Send Mail
 //            $mailReceivers = [Auth::user()->email,$request->email];
@@ -212,11 +215,14 @@ class ContactController extends Controller
 //                Mail::to($mailReceiver)->send(new SendMail($sendUsers,$sendContact,$receiver));
 //            }
 
-        }elseif($request->functionality == 2){
-            Contact::destroy($request->contact_ids);
-        }else{
-            return abort(403);
+            }elseif($request->functionality == 2){
+                Contact::destroy($request->contact_ids);
+            }else{
+                return abort(403);
+            }
         }
+
+
         return redirect()->back();
     }
 
@@ -242,22 +248,26 @@ class ContactController extends Controller
 
 
     public function bulkForceAction(\Illuminate\Http\Request $request){
-
-        if($request->functionality == 1){
-            $contact = Contact::onlyTrashed()->whereIn('id', $request->contact_ids);
+        if($request->contact_ids == null){
+            return  redirect()->back()->with('null','Please select at least one.');
+        }else{
+            if($request->functionality == 1){
+                $contact = Contact::onlyTrashed()->whereIn('id', $request->contact_ids);
                 $contact->restore();
-        }elseif($request->functionality == 2){
+            }elseif($request->functionality == 2){
 
-            $contacts = Contact::onlyTrashed()->whereIn('id', $request->contact_ids)->get();
+                $contacts = Contact::onlyTrashed()->whereIn('id', $request->contact_ids)->get();
                 foreach ($contacts as $contact) {
 
                     Storage::delete("public/photo/".$contact->photo);
 
                     $contact->forceDelete();
                 }
-        }else{
-            return abort(403);
+            }else{
+                return abort(403);
+            }
         }
+
         return redirect()->back();
     }
 }

@@ -7,6 +7,16 @@
             <div class="col">
                 <div class="">
 
+                    @if(session('null'))
+                        <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                            <div>
+                                <i class="fas fa-exclamation-triangle fa-1x fa-fw me-2"></i>
+                                {{session('null')}}
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     @if(count($contacts) != 0)
                         <div class="">
                             <input type="checkbox" id="checkAll" class="form-check-input">

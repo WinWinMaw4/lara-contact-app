@@ -41,9 +41,9 @@
                             <form action="{{route('shared-contact.update',$sharedContact->id)}}" method="post">
                                 @csrf
                                 @method('put')
-                                @foreach(\Illuminate\Support\Facades\Auth::user()->unreadNotifications as $notification)
-                                    <input type="text" name="notificationId" value="{{$notification->id}}">
-                                @endforeach
+{{--                                @foreach(\Illuminate\Support\Facades\Auth::user()->unreadNotifications as $notification)--}}
+{{--                                    <input type="text" name="notificationId" value="{{$notification->id}}">--}}
+{{--                                @endforeach--}}
                                 <input type="hidden" name="action" value="cancel">
                                 <button class="btn btn-danger">
                                     {{__('cancel')}}
