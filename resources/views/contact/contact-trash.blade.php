@@ -55,10 +55,10 @@
 
                                 </div>
                                 <div class="btn-group">
-                                    <a href="{{ route('contact.restore',$contact->id) }}" class="btn btn-sm btn-outline-primary" title="restore">
+                                    <a href="{{ route('contact.restore',$contact->id) }}" class="btn btn-sm btn-outline-success" title="restore">
                                         <i class="fas fa-trash-restore-alt "></i>
                                     </a>
-                                    <a href="{{ route('contact.forceDelete',$contact->id) }}" class="btn btn-sm btn-outline-primary" title="forceDelete">
+                                    <a href="{{ route('contact.forceDelete',$contact->id) }}" class="btn btn-sm btn-outline-danger" title="forceDelete">
                                         <i class="fas fa-trash-alt "></i>
                                     </a>
                                 </div>

@@ -66,29 +66,29 @@
                             </div>
                             <div class="btn-group">
 {{--                                //single share form--}}
-                                <form
-                                    action="{{route('contact.bulkActionOnce',$contact->id)}}"
-                                    id="bulk-action-once"
-                                    method="post">
-                                    @csrf
-                                    <input type="hidden"
-                                           name="contact_ids[]"
-                                           value="{{$contact->id}}"
-                                    >
+{{--                                <form--}}
+{{--                                    action="{{route('contact.bulkActionOnce',$contact->id)}}"--}}
+{{--                                    id="bulk-action-once"--}}
+{{--                                    method="post">--}}
+{{--                                    @csrf--}}
+{{--                                    <input type="hidden"--}}
+{{--                                           name="contact_ids[]"--}}
+{{--                                           value="{{$contact->id}}"--}}
+{{--                                    >--}}
 
-                                </form>
-                                <button class="shareBtn btn btn-sm btn-outline-primary" id="contact_id{{$contact->id}}" data-bs-toggle="modal" data-bs-target="#emailModal{{$contact->id}}">
-                                    <i class="fa-solid fa-fw  fa-paper-plane"></i>
-                                </button>
+{{--                                </form>--}}
+{{--                                <button class="shareBtn btn btn-sm btn-outline-primary" id="contact_id{{$contact->id}}" data-bs-toggle="modal" data-bs-target="#emailModal{{$contact->id}}">--}}
+{{--                                    <i class="fa-solid fa-fw  fa-paper-plane"></i>--}}
+{{--                                </button>--}}
 
 
-                                    <a href="{{ route('contact.edit',$contact->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ route('contact.edit',$contact->id) }}" class="btn btn-sm rounded-start btn-outline-warning">
                                         <i class="fa-solid fa-fw fa-pencil-alt"></i>
                                     </a>
                                     <form action="{{route('contact.destroy',$contact->id)}}" method="post" class="d-inline-block">
                                         @csrf
                                         @method('delete')
-                                        <button class="btn btn-sm btn-outline-primary">
+                                        <button class="btn btn-sm btn-outline-danger">
                                             <i class="fa-solid fa-fw fa-trash-alt"></i>
                                         </button>
                                     </form>
