@@ -5,7 +5,7 @@
             <div class="col-12 col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        Contact Update
+                        {{__('Update Contact')}}
                     </div>
                     <div class="card-body">
                         <form action="{{route('contact.update',$contact->id)}}" method="post" enctype="multipart/form-data">
@@ -49,7 +49,7 @@
                                 @enderror
                             </div>
                             <div>
-                                <button class="btn btn-lg btn-primary form-control ">Update Contact</button>
+                                <button class="btn btn-lg btn-primary form-control ">{{__('Update Contact')}}</button>
                             </div>
                         </form>
                     </div>

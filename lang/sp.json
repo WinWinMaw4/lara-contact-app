@@ -1,0 +1,15 @@
+{
+    "contact":"contacto",
+    "select action" : "seleccione la acción",
+    "share contact" : "compartir contacto",
+    "delete contact" : "borrar contacto",
+    "submit" : "entregar",
+    "contact share" : "contacto compartir",
+    "recipient email" : "Receptor de E-mail",
+    "message" : "mensaje",
+    "close" : "Cerrar",
+    "share": "Cuota",
+    "cancel" : "cancelar",
+    "accept" : "aceptar",
+    "reject": "rechazar"
+}

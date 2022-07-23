@@ -105,12 +105,12 @@
                     <div class="">
                         <div class="d-flex">
                             <select class="form-select me-2" form="bulk_action" name="functionality">
-                                <option value="">Select Action</option>
-                                <option value="1">Share Contact</option>
-                                <option value="2">Delete Contact</option>
+                                <option value="">{{__('Select Action')}}</option>
+                                <option value="1">{{__('Share Contact')}}</option>
+                                <option value="2">{{__('Delete Contact')}}</option>
                             </select>
                             <div class="">
-                                <button class="btn btn-outline-primary" form="bulk_action" >Submit</button>
+                                <button class="btn btn-outline-primary text-nowrap" form="bulk_action" >{{__('Submit')}}</button>
                             </div>
                         </div>
                     </div>
@@ -161,24 +161,24 @@
 <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="emailModalLabel">Modal title</h5>
-                <button type="button" onclick="cancelAction()" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+{{--            <div class="modal-header">--}}
+{{--                <h5 class="modal-title" id="emailModalLabel">Modal title</h5>--}}
+{{--                <button type="button" onclick="cancelAction()" class="btn-close" data-bs-dismiss="modal"></button>--}}
+{{--            </div>--}}
             <div class="modal-body">
                 <div class="">
-                    <label class="form-label" for="">Recipient Email</label>
+                    <label class="form-label" for="">{{__('Recipient Email')}}</label>
                     <input type="text" name="email" form="bulk_action" class="form-control">
                 </div>
                 <div class="">
-                    <label class="form-label" for="">Message</label>
+                    <label class="form-label" for="">{{__('Message')}}</label>
                     <textarea name="message" form="bulk_action" class="form-control" id="" cols="30" rows="7"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="cancelAction()"  class="btn btn-secondary">Close</button>
+                <button type="button" onclick="cancelAction()"  class="btn btn-secondary">{{__('Close')}}</button>
                 <button type="submit" form="bulk_action" class="btn btn-primary">
-                    <i class="fa-solid fa-paper-plane"></i> Share
+                    <i class="fa-solid fa-paper-plane"></i> {{__('Share')}}
                 </button>
             </div>
         </div>

@@ -52,6 +52,37 @@
                                 </li>
                             @endif
                         @else
+{{--                            localizataion--}}
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle position-relative noti-dropdown" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-globe fa-fw fa-2x"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <ul class="list-group list">
+                                        <li class="list-group-item border-0">
+                                            <img src="https://bit.ly/3cCKIAk" alt="" class="rounded-pill w-25 h-25">
+                                            <a href="{{route('lang.change','en')}}">English</a>
+                                        </li>
+                                        <li class="list-group-item border-0">
+                                            <img src="https://bit.ly/3OwUSQ2" alt="" class="rounded-pill w-25 h-25">
+                                            <a href="{{route('lang.change','mm')}}">Myanmar</a>
+                                        </li>
+                                        <li class="list-group-item border-0">
+                                            <img src="https://bit.ly/3RQoQSd" alt="" class="rounded-pill w-25 h-25 border">
+                                            <a href="{{route('lang.change','jpn')}}">Japanese</a>
+                                        </li>
+{{--                                        <li class="list-group-item border-0">--}}
+{{--                                            <a href="{{route('lang.change','fr')}}">French</a>--}}
+{{--                                        </li>--}}
+{{--                                        <li class="list-group-item border-0">--}}
+{{--                                            <a href="{{route('lang.change','sp')}}">Spanish</a>--}}
+{{--                                        </li>--}}
+                                    </ul>
+
+                                </div>
+                            </li>
+{{--                        notification--}}
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle position-relative noti-dropdown" href="#" role="button" data-bs-toggle="dropdown">
                                     <i class="fas fa-bell fa-fw fa-2x"></i>
@@ -75,6 +106,7 @@
                                                 </a>
                                         </li>
                                         @endif
+
                                         @forelse(auth()->user()->Notifications as $notification)
                                             <li class="list-group-item border-0 border-bottom">
                                                 <a href="{{$notification->data['url']}}"  class="{{ $notification->read_at !=  null ? 'text-black-50' : 'text-black' }} text-decoration-none d-flex justify-content-start align-items-center">
@@ -158,14 +190,14 @@
 
 
 
-                       <a href="{{url('/contact')}}" class="btn btn-outline-primary me-2">
-                           <i class="fas fa-list fa-fw"></i>Contact List
+                       <a href="{{url('/contact')}}" class="btn btn-outline-primary me-2 {{request()->routeIs('contact.index') ? 'active' : '' }}">
+                           <i class="fas fa-list fa-fw"></i>{{__('Contact Lists')}}
                        </a>
-                       <a href="{{url('/contact/create')}}" class="btn btn-outline-primary me-2">
-                           <i class="fas fa-plus fa-fw"></i>Create Contact
+                       <a href="{{url('/contact/create')}}" class="btn btn-outline-primary me-2 {{request()->routeIs('contact.create') ? 'active' : '' }}">
+                           <i class="fas fa-plus fa-fw"></i>{{__('Create Contact')}}
                        </a>
-                       <a href="{{url('/trash/contact')}}" class="btn btn-outline-danger me-2">
-                           <i class="fas fa-trash-can fa-fw"></i>Go To Trash
+                       <a href="{{url('/trash/contact')}}" class="btn btn-outline-danger me-2 {{request()->routeIs('trash.contact') ? 'active' : '' }}">
+                           <i class="fas fa-trash-can fa-fw"></i>{{__('Go To Trash')}}
                        </a>
                    </div>
                </div>

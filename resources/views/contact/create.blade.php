@@ -5,7 +5,7 @@
             <div class="col-12 col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        Contact Create
+                        {{__('Create Contact')}}
                     </div>
                     <div class="card-body">
                             <form action="{{route('contact.store')}}" method="post" enctype="multipart/form-data">
@@ -43,7 +43,7 @@
                                     @enderror
                                 </div>
                                 <div>
-                                    <button class="btn btn-lg btn-primary form-control ">Add Contact</button>
+                                    <button class="btn btn-lg btn-primary form-control ">{{__('Add Contact')}}</button>
                                 </div>
                             </form>
                     </div>

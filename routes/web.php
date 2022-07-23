@@ -39,6 +39,7 @@ Route::middleware("auth")->group(function (){
     Route::get('/mark-as-read/{notificationId}',[NotificationController::class,'markAsRead'])->name('markAsRead');
     Route::get('/all-mark-as-read',[NotificationController::class,'AllMarkAsRead'])->name('AllMarkAsRead');
     Route::get('/mark-as-read',[NotificationController::class,'deleteAllNotification'])->name('deleteAllNotification');
+    Route::get('/lang/{locale}', [\App\Http\Controllers\LocalizationController::class,'lang_change'])->name('lang.change');
 
 });
 

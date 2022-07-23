@@ -74,12 +74,12 @@
                         <div class="">
                             <div class="d-flex">
                                 <select class="form-select me-2" form="bulk_force_action" name="functionality" required>
-                                    <option value="">Select Action</option>
-                                    <option value="1">ReStore</option>
-                                    <option value="2">Force Delete</option>
+                                    <option value="">{{__('Select Action')}}</option>
+                                    <option value="1">{{__('Restore')}}</option>
+                                    <option value="2">{{__('Delete Contact')}}</option>
                                 </select>
                                 <div class="">
-                                    <button class="btn btn-outline-primary" form="bulk_force_action" >Submit</button>
+                                    <button class="btn btn-outline-primary text-nowrap" form="bulk_force_action" >{{__('Submit')}}</button>
                                 </div>
                             </div>
                         </div>
